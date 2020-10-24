@@ -1,5 +1,4 @@
-import React from 'react';
-import { data } from './data';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -31,9 +30,26 @@ const Card = styled.div`
 	}
 `
 
-function App() {
-  return (
-    <Container>
+const App = (props) => {
+	const [data, setData] = useState([]);
+	
+	useEffect(() => {
+    fetch("https://v2.api-football.com/fixtures/league/524", {
+      method: 'GET',
+      headers: {  
+        'X-RapidAPI-Key': '4ccae9d0e49ff1951e16201c88ae7ce5',
+      }
+    })   
+    .then(response => response.json())
+    .then((responseData) => {
+			console.log(responseData.api.fixtures)
+			setData(responseData.api.fixtures)
+    })
+    .catch(error => this.setState({ error }));
+	}, []);
+	
+	return (
+		<Container>
 			<Wrapper>
 				{
 					data.map((item, index) =>(
@@ -55,7 +71,7 @@ function App() {
 				}
 			</Wrapper>
     </Container>
-  );
+	);
 }
-
+ 
 export default App;
